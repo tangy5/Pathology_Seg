@@ -150,15 +150,15 @@ def main_worker(gpu, args):
 #         num_res_units=2,
 #     )
 
-    model = SegResNet(
-        spatial_dims=2,
-        init_filters=32,
-        in_channels=args.in_channels,
-        out_channels=args.out_channels,
-        dropout_prob=0.2,
-        blocks_down=[1,2,2,4],
-        blocks_up=[1,1,1],
-    )
+    # model = SegResNet(
+    #     spatial_dims=2,
+    #     init_filters=32,
+    #     in_channels=args.in_channels,
+    #     out_channels=args.out_channels,
+    #     dropout_prob=0.2,
+    #     blocks_down=[1,2,2,4],
+    #     blocks_up=[1,1,1],
+    # )
 
 #     model = UNETR(
 #         in_channels=3,
@@ -174,7 +174,7 @@ def main_worker(gpu, args):
 #         dropout_rate=0.0,
 #     )
     
-#     model = build_sam_vit_b(checkpoint="./segment_anything/sam_vit_b_01ec64.pth")
+    model = build_sam_vit_b(checkpoint="./segment_anything/sam_vit_b_01ec64.pth")
 #     model = build_sam_vit_b(checkpoint=None)
 
     if args.resume_ckpt:
