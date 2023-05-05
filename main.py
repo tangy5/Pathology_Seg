@@ -31,7 +31,7 @@ from monai.transforms import Activations, AsDiscrete, Compose
 from monai.utils.enums import MetricReduction
 from segment_anything import build_sam, build_sam_vit_b
 
-parser = argparse.ArgumentParser(description="Swin UNETR segmentation pipeline")
+parser = argparse.ArgumentParser(description="Pathology Neptune Segmentation Pipeline")
 parser.add_argument("--checkpoint", default=None, help="start training from saved checkpoint")
 parser.add_argument("--logdir", default="test", type=str, help="directory to save the tensorboard logs")
 parser.add_argument(
@@ -41,7 +41,7 @@ parser.add_argument("--data_dir", default="/dataset/dataset0/", type=str, help="
 parser.add_argument("--json_list", default="dataset_0.json", type=str, help="dataset json file")
 parser.add_argument(
     "--pretrained_model_name",
-    default="swin_unetr.epoch.b4_5000ep_f48_lr2e-4_pretrained.pt",
+    default="",
     type=str,
     help="pretrained model name",
 )
@@ -184,7 +184,7 @@ def main_worker(gpu, args):
 
     if args.use_ssl_pretrained:
         try:
-            model_dict = torch.load("./pretrained_models/model_swinvit.pt")
+            model_dict = torch.load("./pretrained_models/TODO.pt")
             state_dict = model_dict["state_dict"]
             # fix potential differences in state dict keys from pre-training to
             # fine-tuning
@@ -192,15 +192,8 @@ def main_worker(gpu, args):
                 print("Tag 'module.' found in state dict - fixing!")
                 for key in list(state_dict.keys()):
                     state_dict[key.replace("module.", "")] = state_dict.pop(key)
-            if "swin_vit" in list(state_dict.keys())[0]:
-                print("Tag 'swin_vit' found in state dict - fixing!")
-                for key in list(state_dict.keys()):
-                    state_dict[key.replace("swin_vit", "swinViT")] = state_dict.pop(key)
-            # We now load model weights, setting param `strict` to False, i.e.:
-            # this load the encoder weights (Swin-ViT, SSL pre-trained), but leaves
-            # the decoder weights untouched (CNN UNet decoder).
             model.load_state_dict(state_dict, strict=False)
-            print("Using pretrained self-supervised Swin UNETR backbone weights !")
+            print("Using pretrained self-supervised  backbone weights !")
         except ValueError:
             raise ValueError("Self-supervised pre-trained weights not available for" + str(args.model_name))
 
